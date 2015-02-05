@@ -3,14 +3,14 @@
 ```
 node bin/tls-sort-cipher.js
 
-Usage: node ./bin/tls-sort-cipher.js
+Lookup the preferred TLS ciphers.
+Usage: node ./bin/tls-sort-cipher.js -h [hostname]
 
 Options:
-  -h, --host   The host to connect to        [required]
-  -p, --port   The port to connect to        [default: 443]
-  -d, --debug  print every packet to stdout
-
-Missing required arguments: h
+  -h, --host   Remote hostname to connect to          [required]
+  -p, --port   Port to connect to on the remote host  [default: 443]
+  -c, --count  Stop at count attempts                 [default: 32]
+  -d, --debug  be silly and print everything stdout 
 
 
 node bin/tls-sort-cipher.js -h google.com
