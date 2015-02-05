@@ -1,14 +1,17 @@
 var argv = require('optimist')
-    .usage('Sort the TLS ciphers by server.\nUsage: $0')
+    .usage('Lookup the preferred TLS ciphers.\nUsage: $0 -h [hostname]')
     .demand('h')
     .alias('h', 'host')
-    .describe('h', 'The host to connect to')
+    .describe('h', 'Remote hostname to connect to')
     .alias('p', 'port')
-    .describe('p', 'The port to connect to')
+    .describe('p', 'Port to connect to on the remote host')
     .default('p', 443)
+    .alias('c', 'count')
+    .describe('c', 'Stop at count attempts')
+    .default('c', 32)
     .boolean('d')
     .alias('d', 'debug')
-    .describe('d', 'print every packet to stdout')
+    .describe('d', 'be silly and print everything stdout')
     .argv;
 
 var cipherSuite = [
@@ -425,10 +428,13 @@ var handler = function(err, cipher) {
     } else {
         console.log(pos+': '+cipher);
         pos++;
-        var index = cipherSuite.indexOf(cipher);
-        if (index > 0) {
-            cipherSuite.splice(index, 1);
-            getTopCipher(handler);
+        
+        if (argv.count && parseInt(argv.count) >= pos) {
+            var index = cipherSuite.indexOf(cipher);
+            if (index > 0) {
+                cipherSuite.splice(index, 1);
+                getTopCipher(handler);
+            }
         }
     }
 };
